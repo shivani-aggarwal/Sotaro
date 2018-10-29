@@ -1,33 +1,11 @@
 const canvas = document.getElementById("screen");
 const context = canvas.getContext("2d");
 
-createImage = (src) => {
-	image = new Image();
-	image.src = src;
-	return image;
-}
-
-backgroundImages = [
-	{
-		img: createImage("./assets/backTrees.png"),
-		layerSpeed: 0,
-		x: 0
-	},
-	{
-		img: createImage("./assets/forestLights.png"),
-		layerSpeed: 1,
-		x: 0
-	},
-	{
-		img: createImage("./assets/middleTrees.png"),
-		layerSpeed: 2,
-		x: 0
-	},
-	{
-		img: createImage("./assets/frontTrees.png"),
-		layerSpeed: 3,
-		x: 0
-	}
+let backgroundImages = [
+	new MovingImage('./assets/backTrees.png',0),
+	new MovingImage('./assets/forestLights.png',1),
+	new MovingImage('./assets/middleTrees.png',2),
+	new MovingImage('./assets/frontTrees.png',3)
 ];
 
 function drawBackground() {
@@ -41,10 +19,10 @@ function drawBackground() {
               context.drawImage(layer.img, layer.x + i * layer.img.width, 0);
            	}
 
-           	layer.x -= layer.layerSpeed;
+           	layer.x -= layer.speed;
 
-           	if (layer.layerSpeed-index <= 7) {
-				layer.layerSpeed += 0.001;
+           	if (layer.speed-index <= 7) {
+				layer.speed += 0.001;
            	}
 
 	});
