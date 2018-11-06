@@ -8,7 +8,10 @@ let backgroundImages = [
 	new MovingImage('./assets/frontTrees.png',3)
 ];
 
-function drawBackground() {
+let wizard = new Wizard('./assets/sotaroSprite.png');
+let frameCount = 0;
+
+function drawBackground() { 
 
 	backgroundImages.forEach((layer,index) => {
 			if (layer.x < -650) {
@@ -16,7 +19,7 @@ function drawBackground() {
 			}
 
 			for (var i = 0; i < 2; i++) {
-              context.drawImage(layer.img, layer.x + i * layer.img.width, 0);
+              context.drawImage(layer.img, layer.x + i * layer.width, 0);
            	}
 
            	layer.x -= layer.speed;
@@ -26,6 +29,18 @@ function drawBackground() {
            	}
 
 	});
+
+	window.requestAnimationFrame(drawUI);
 }
 
-setInterval(drawBackground, 20);
+function drawUI() {
+	frameCount++;
+	drawBackground();
+	wizard.init();
+	if (frameCount > 60/backgroundImages[3].speed) {
+		wizard.walk();
+		frameCount = 0;
+	}
+}
+
+window.requestAnimationFrame(drawUI);
