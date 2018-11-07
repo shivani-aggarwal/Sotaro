@@ -10,6 +10,8 @@ let backgroundImages = [
 
 let wizard = new Wizard('./assets/sotaroSprite.png');
 let frameCount = 0;
+let isJumping = false;
+let jumpCount = 0;
 
 function drawBackground() { 
 
@@ -35,12 +37,33 @@ function drawBackground() {
 
 function drawUI() {
 	frameCount++;
+	let frameThreshold = 60/backgroundImages[3].speed;
+	const jumpFrameThreshold = 1;
+	const jumpCycleCount = 25;
+
 	drawBackground();
 	wizard.init();
-	if (frameCount > 60/backgroundImages[3].speed) {
+
+	if (isJumping && frameCount > jumpFrameThreshold) {
+		jumpCount++;
+		wizard.jump();
+		if (jumpCount >= jumpCycleCount) {
+			isJumping = false;
+			jumpCount = 0;
+		}
+		frameCount = 0;
+	}
+    else if (frameCount > frameThreshold) {
 		wizard.walk();
 		frameCount = 0;
 	}
 }
+
+window.addEventListener('keydown', (event) => {
+	if (event.keyCode === 32) {
+		event.preventDefault();
+		isJumping = true;
+	}
+}, false);
 
 window.requestAnimationFrame(drawUI);

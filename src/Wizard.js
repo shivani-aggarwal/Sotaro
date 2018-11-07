@@ -1,14 +1,15 @@
  class Wizard extends MovingImage {
-	constructor(img,speed=3, xCanvas=30, yCanvas=230, height=69, width=46, 
+	constructor(img,speed=0, x=30, y=230, height=69, width=46, 
 				xSpriteCoord=70, ySpriteCoord=17, scaledHeight=120, scaledWidth=80,
-				walkIndex=0) {
-		super(img, speed, xCanvas, yCanvas, height, width);
+				walkIndex=0, jumpIndex=0) {
+		super(img, speed, x, y, height, width);
 		this.xSpriteCoord = xSpriteCoord;
 		this.ySpriteCoord = ySpriteCoord;
 		this.scaledHeight = scaledHeight;
 		this.scaledWidth = scaledWidth;
 
 		this.walkIndex = walkIndex;
+		this.jumpIndex = jumpIndex;
 	}
 
 	updateScaledValues() {
@@ -76,6 +77,76 @@
 			this.walkIndex = 0;
 		}
 
+	}
+
+	jump() {
+		const jumpingSprite = [
+			{
+				xSpriteCoord: 106,
+				ySpriteCoord: 187,
+				width: 44,
+				height: 78,
+				yVelocity: -10
+			},
+			{
+				xSpriteCoord: 171,
+				ySpriteCoord: 189,
+				width: 43,
+				height: 78,
+				yVelocity: 10
+			},
+			{
+				xSpriteCoord: 70,
+				ySpriteCoord: 17,
+				width: 46,
+				height: 69,
+				yVelocity: 0
+			}
+		]; 
+
+		this.xSpriteCoord = jumpingSprite[this.jumpIndex].xSpriteCoord;
+		this.ySpriteCoord = jumpingSprite[this.jumpIndex].ySpriteCoord;
+		this.width = jumpingSprite[this.jumpIndex].width;
+		this.height = jumpingSprite[this.jumpIndex].height;
+		this.updateScaledValues();
+
+		switch(this.jumpIndex) {
+			case 0: 
+				this.y += jumpingSprite[this.jumpIndex].yVelocity;
+				if (this.y === 110) {
+					this.jumpIndex++;
+				}
+				break;
+			case 1: 
+				this.y += jumpingSprite[this.jumpIndex].yVelocity;
+				if (this.y === 230) {
+					this.jumpIndex++;
+				}
+				break;
+			default:
+				this.y = 230;
+				this.jumpIndex++;
+				break;
+		}
+
+		this.drawFrame();
+
+		if (this.jumpIndex >= jumpingSprite.length) {
+			this.jumpIndex = 0;
+		}
+
+	}
+
+	attack() {
+
+	}
+
+	hurt() {
+
+	}
+
+	death() {
+		
 	}
 
 }
