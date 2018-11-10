@@ -9,9 +9,21 @@ let backgroundImages = [
 ];
 
 let wizard = new Wizard('./assets/sotaroSprite.png');
+
 let frameCount = 0;
+let attackCount = 0;
+
+let doneJumping = true;
 let isJumping = false;
-let jumpCount = 0;
+let isAttacking = false;
+
+const jumpFrameThreshold = 1;
+const attackCycleCount = 5;
+const attackFrameThreshold = 3;
+const spaceKey = 32;
+const aKey = 65;
+const groundYPos = 230;
+const jumpHeight = 100;
 
 function drawBackground() { 
 
@@ -35,23 +47,41 @@ function drawBackground() {
 	window.requestAnimationFrame(drawUI);
 }
 
+function jump() { 
+	if (!isAttacking && !doneJumping) {
+		doneJumping = wizard.jump();
+		if (doneJumping) {
+			isJumping = false;
+			wizard.maxHeight = jumpHeight;
+		}
+		frameCount = 0;
+	}
+}
+
+function attack() {
+	attackCount++;
+	wizard.attack();
+	if (attackCount >= attackCycleCount) {
+		isAttacking = false;
+		attackCount = 0;
+		if (wizard.y < groundYPos) {
+			wizard.maxHeight = wizard.y;
+		}
+	}
+	frameCount = 0;
+}
+
 function drawUI() {
 	frameCount++;
 	let frameThreshold = 60/backgroundImages[3].speed;
-	const jumpFrameThreshold = 1;
-	const jumpCycleCount = 25;
 
 	drawBackground();
 	wizard.init();
-
-	if (isJumping && frameCount > jumpFrameThreshold) {
-		jumpCount++;
-		wizard.jump();
-		if (jumpCount >= jumpCycleCount) {
-			isJumping = false;
-			jumpCount = 0;
-		}
-		frameCount = 0;
+	if (isAttacking && frameCount > attackFrameThreshold) {
+		attack();
+	}
+	else if (isJumping && frameCount > jumpFrameThreshold) {
+		jump();
 	}
     else if (frameCount > frameThreshold) {
 		wizard.walk();
@@ -60,9 +90,14 @@ function drawUI() {
 }
 
 window.addEventListener('keydown', (event) => {
-	if (event.keyCode === 32) {
+	if (event.keyCode === spaceKey) {
 		event.preventDefault();
 		isJumping = true;
+		doneJumping = false;
+	}
+	else if (event.keyCode === aKey) {
+		event.preventDefault();
+		isAttacking = true;
 	}
 }, false);
 

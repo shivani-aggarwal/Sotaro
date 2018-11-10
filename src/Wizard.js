@@ -1,15 +1,21 @@
  class Wizard extends MovingImage {
 	constructor(img,speed=0, x=30, y=230, height=69, width=46, 
 				xSpriteCoord=70, ySpriteCoord=17, scaledHeight=120, scaledWidth=80,
-				walkIndex=0, jumpIndex=0) {
+				yVelocity=0, xVelocity=0, maxHeight=100,
+				walkIndex=0, jumpIndex=0, attackIndex=0) {
 		super(img, speed, x, y, height, width);
 		this.xSpriteCoord = xSpriteCoord;
 		this.ySpriteCoord = ySpriteCoord;
 		this.scaledHeight = scaledHeight;
 		this.scaledWidth = scaledWidth;
 
+		this.yVelocity = yVelocity;
+		this.xVelocity = xVelocity;
+		this.maxHeight = maxHeight;
+
 		this.walkIndex = walkIndex;
 		this.jumpIndex = jumpIndex;
+		this.attackIndex = attackIndex;
 	}
 
 	updateScaledValues() {
@@ -80,13 +86,20 @@
 	}
 
 	jump() {
+		const groundYPos = 230;
+
+		let initalVelocity = -10;
+		if (this.yVelocity !== 0) {
+			initalVelocity = this.yVelocity;
+		}
+
 		const jumpingSprite = [
 			{
 				xSpriteCoord: 106,
 				ySpriteCoord: 187,
 				width: 44,
 				height: 78,
-				yVelocity: -10
+				yVelocity: initalVelocity
 			},
 			{
 				xSpriteCoord: 171,
@@ -104,41 +117,90 @@
 			}
 		]; 
 
+		let doneJumping = false; 
+	 
+		if ( (this.y === this.maxHeight && this.yVelocity === -10) ) {
+			this.jumpIndex = 1;
+		}
+		else if ( (this.y === groundYPos && this.yVelocity === 10) || 
+			      (this.y === groundYPos && this.jumpIndex === 1) ) {
+			this.jumpIndex = 2; 
+		}
+
 		this.xSpriteCoord = jumpingSprite[this.jumpIndex].xSpriteCoord;
 		this.ySpriteCoord = jumpingSprite[this.jumpIndex].ySpriteCoord;
 		this.width = jumpingSprite[this.jumpIndex].width;
 		this.height = jumpingSprite[this.jumpIndex].height;
 		this.updateScaledValues();
 
-		switch(this.jumpIndex) {
-			case 0: 
-				this.y += jumpingSprite[this.jumpIndex].yVelocity;
-				if (this.y === 110) {
-					this.jumpIndex++;
-				}
-				break;
-			case 1: 
-				this.y += jumpingSprite[this.jumpIndex].yVelocity;
-				if (this.y === 230) {
-					this.jumpIndex++;
-				}
-				break;
-			default:
-				this.y = 230;
-				this.jumpIndex++;
-				break;
-		}
+		this.yVelocity = jumpingSprite[this.jumpIndex].yVelocity;
+		this.y += this.yVelocity;
 
 		this.drawFrame();
 
-		if (this.jumpIndex >= jumpingSprite.length) {
+		if (this.jumpIndex >= 2) {
 			this.jumpIndex = 0;
+			doneJumping = true;
+			return doneJumping;
 		}
-
 	}
 
 	attack() {
+		const groundYPos = 230;
 
+		const attackingSprite = [
+			{
+				xSpriteCoord: 83,
+				ySpriteCoord: 551,
+				width: 49,
+				height: 70
+			},
+			{
+				xSpriteCoord: 152,
+				ySpriteCoord: 553,
+				width: 59,
+				height: 71
+			},
+			{
+				xSpriteCoord: 232,
+				ySpriteCoord: 554,
+				width: 56,
+				height: 70
+			},
+			{
+				xSpriteCoord: 315,
+				ySpriteCoord: 555,
+				width: 49,
+				height: 68
+			},
+			{
+				xSpriteCoord: 385,
+				ySpriteCoord: 556,
+				width: 46,
+				height: 69
+			}
+		];
+
+		this.xSpriteCoord = attackingSprite[this.attackIndex].xSpriteCoord;
+		this.ySpriteCoord = attackingSprite[this.attackIndex].ySpriteCoord;
+		this.width = attackingSprite[this.attackIndex].width;
+		this.height = attackingSprite[this.attackIndex].height;
+ 		if (this.y <= this.maxHeight || this.y >= groundYPos) {
+			this.yVelocity *= -1;
+		}
+		if (this.y === groundYPos) {
+			this.yVelocity = 0;
+		}
+		this.y += this.yVelocity;
+
+		this.updateScaledValues();
+
+		this.drawFrame();
+
+		this.attackIndex++;
+		if (this.attackIndex >= attackingSprite.length) {
+			this.attackIndex = 0;
+		}
 	}
 
 	hurt() {
