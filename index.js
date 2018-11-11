@@ -77,6 +77,7 @@ function drawUI() {
 
 	drawBackground();
 	wizard.init();
+	
 	if (isAttacking && frameCount > attackFrameThreshold) {
 		attack();
 	}

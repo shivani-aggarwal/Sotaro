@@ -1,45 +1,15 @@
- class Wizard extends MovingImage {
+class Wizard extends Sprite {
 	constructor(img,speed=0, x=30, y=230, height=69, width=46, 
 				xSpriteCoord=70, ySpriteCoord=17, scaledHeight=120, scaledWidth=80,
-				yVelocity=0, xVelocity=0, maxHeight=100,
+				yVelocity=0, maxHeight=100,
 				walkIndex=0, jumpIndex=0, attackIndex=0) {
-		super(img, speed, x, y, height, width);
-		this.xSpriteCoord = xSpriteCoord;
-		this.ySpriteCoord = ySpriteCoord;
-		this.scaledHeight = scaledHeight;
-		this.scaledWidth = scaledWidth;
 
-		this.yVelocity = yVelocity;
-		this.xVelocity = xVelocity;
+		super(img, speed, x, y, height, width, 
+			  xSpriteCoord, ySpriteCoord, scaledHeight, scaledWidth);
 		this.maxHeight = maxHeight;
-
 		this.walkIndex = walkIndex;
 		this.jumpIndex = jumpIndex;
 		this.attackIndex = attackIndex;
-	}
-
-	updateScaledValues() {
-		const scale = 1.74;
-		this.scaledWidth = this.width*scale;
-		this.scaledHeight = this.height*scale;
-	}
-
-	drawFrame() {
-		context.drawImage(
-			this.img, 
-			this.xSpriteCoord, 
-			this.ySpriteCoord, 
-			this.width, 
-			this.height, 
-			this.x, 
-			this.y,
-			this.scaledWidth,
-			this.scaledHeight
-		);
-	}
-
-	init() {
-		this.drawFrame();
 	}
 
 	walk() {
@@ -82,7 +52,6 @@
 		if (this.walkIndex >= walkingSprite.length) {
 			this.walkIndex = 0;
 		}
-
 	}
 
 	jump() {
