@@ -9,6 +9,7 @@ let backgroundImages = [
 ];
 
 let wizard = new Wizard('./assets/sotaroSprite.png');
+let fireballs = [];
 
 let frameCount = 0;
 let attackCount = 0;
@@ -16,6 +17,8 @@ let attackCount = 0;
 let doneJumping = true;
 let isJumping = false;
 let isAttacking = false;
+let startFireball = false;
+let fireballMoving = false;
 
 const jumpFrameThreshold = 1;
 const attackCycleCount = 5;
@@ -60,7 +63,7 @@ function jump() {
 
 function attack() {
 	attackCount++;
-	wizard.attack();
+	startFireball = wizard.attack();
 	if (attackCount >= attackCycleCount) {
 		isAttacking = false;
 		attackCount = 0;
@@ -71,13 +74,46 @@ function attack() {
 	frameCount = 0;
 }
 
+function fireballAnimation(fireballArray) {
+
+	fireballArray.forEach((fireball) => {
+		fireball.updateScaledValues();
+		fireball.drawFrame();
+		fireball.x += fireball.speed;
+		if (fireball.x >= canvas.width + 26) {
+			fireball.speed = null;
+		}
+	});
+
+	fireballArray = fireballArray.filter((fireball) => {
+		return fireball.speed !== null;
+	});
+
+	if (fireballArray.length < 1) {
+		fireballMoving = false;
+	}
+
+}
+
 function drawUI() {
 	frameCount++;
 	let frameThreshold = 60/backgroundImages[3].speed;
 
 	drawBackground();
 	wizard.init();
-	
+
+	if (startFireball) {
+		startFireball = false;
+		fireballMoving = true;
+		let x = wizard.x + wizard.width + 45;
+		let y = wizard.y + 54;
+		fireballs.push(new Sprite('./assets/sotaroSprite.png', 10, x, y, 17, 26, 482, 584));
+		fireballAnimation(fireballs); 
+	}
+	else if (fireballMoving) {
+		fireballAnimation(fireballs);
+	}
+
 	if (isAttacking && frameCount > attackFrameThreshold) {
 		attack();
 	}

@@ -150,6 +150,8 @@ class Wizard extends Sprite {
 			}
 		];
 
+		let startFireball = false;
+
 		this.xSpriteCoord = attackingSprite[this.attackIndex].xSpriteCoord;
 		this.ySpriteCoord = attackingSprite[this.attackIndex].ySpriteCoord;
 		this.width = attackingSprite[this.attackIndex].width;
@@ -166,10 +168,16 @@ class Wizard extends Sprite {
 
 		this.drawFrame();
 
+		if (this.attackIndex === 1) {
+			startFireball = true;
+		}
+
 		this.attackIndex++;
 		if (this.attackIndex >= attackingSprite.length) {
 			this.attackIndex = 0;
 		}
+
+		return startFireball;
 	}
 
 	hurt() {

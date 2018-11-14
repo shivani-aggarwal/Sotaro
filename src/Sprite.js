@@ -1,5 +1,5 @@
 class Sprite extends MovingImage {
-	constructor(img,speed=0, x=0, y=0, height=10, width=10, 
+	constructor(img="",speed=0, x=0, y=0, height, width, 
 				xSpriteCoord=0, ySpriteCoord=0, scaledHeight=0, scaledWidth=0,
 				yVelocity=0) {
 		
