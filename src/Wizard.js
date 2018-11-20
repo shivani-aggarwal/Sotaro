@@ -1,12 +1,12 @@
 class Wizard extends Sprite {
 	constructor(img,speed=0, x=30, y=230, height=69, width=46, 
 				xSpriteCoord=70, ySpriteCoord=17, scaledHeight=120, scaledWidth=80,
-				yVelocity=0, maxHeight=100,
+				yVelocity=0, maxHeight=100, minHeight=230,
 				walkIndex=0, jumpIndex=0, attackIndex=0) {
 
 		super(img, speed, x, y, height, width, 
-			  xSpriteCoord, ySpriteCoord, scaledHeight, scaledWidth);
-		this.maxHeight = maxHeight;
+			  xSpriteCoord, ySpriteCoord, scaledHeight, scaledWidth, yVelocity,
+			  maxHeight, minHeight);
 		this.walkIndex = walkIndex;
 		this.jumpIndex = jumpIndex;
 		this.attackIndex = attackIndex;
@@ -55,7 +55,6 @@ class Wizard extends Sprite {
 	}
 
 	jump() {
-		const groundYPos = 230;
 
 		let initalVelocity = -10;
 		if (this.yVelocity !== 0) {
@@ -91,8 +90,8 @@ class Wizard extends Sprite {
 		if ( (this.y === this.maxHeight && this.yVelocity === -10) ) {
 			this.jumpIndex = 1;
 		}
-		else if ( (this.y === groundYPos && this.yVelocity === 10) || 
-			      (this.y === groundYPos && this.jumpIndex === 1) ) {
+		else if ( (this.y === this.minHeight && this.yVelocity === 10) || 
+			      (this.y === this.minHeight && this.jumpIndex === 1) ) {
 			this.jumpIndex = 2; 
 		}
 
@@ -115,7 +114,6 @@ class Wizard extends Sprite {
 	}
 
 	attack() {
-		const groundYPos = 230;
 
 		const attackingSprite = [
 			{
@@ -156,10 +154,10 @@ class Wizard extends Sprite {
 		this.ySpriteCoord = attackingSprite[this.attackIndex].ySpriteCoord;
 		this.width = attackingSprite[this.attackIndex].width;
 		this.height = attackingSprite[this.attackIndex].height;
- 		if (this.y <= this.maxHeight || this.y >= groundYPos) {
+ 		if (this.y <= this.maxHeight || this.y >= this.minHeight) {
 			this.yVelocity *= -1;
 		}
-		if (this.y === groundYPos) {
+		if (this.y === this.minHeight) {
 			this.yVelocity = 0;
 		}
 		this.y += this.yVelocity;
@@ -181,7 +179,7 @@ class Wizard extends Sprite {
 	}
 
 	hurt() {
-
+		console.log('hurt');
 	}
 
 	death() {
