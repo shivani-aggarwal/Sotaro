@@ -12,11 +12,11 @@ let wizard = new Wizard('./assets/sotaroSprite.png');
 let fireballs = [];
 let enemies = [];
 let enemySpeed = -7;
-enemies.push(new Sprite('./assets/enemies.png', enemySpeed, 650, randomValue(260,130), 46, 55, 5, 771, 64, 77, 0, 100, 260));
+enemies.push(new Sprite('./assets/enemies.png', enemySpeed, 650, randomValue(260,130), 46, 55, 5, 771, 64, 77, 0));
 
 let frameCount = 0;
 let attackCount = 0;
-let enemyCount = 0;
+let enemyFrameCount = 0;
 
 let doneJumping = true;
 let isJumping = false;
@@ -24,29 +24,22 @@ let isAttacking = false;
 let startFireball = false;
 let fireballMoving = false;
 
-const jumpFrameThreshold = 1;
-const attackCycleCount = 5;
-const attackFrameThreshold = 3;
-const spaceKey = 32;
-const aKey = 65;
-const jumpHeight = 100;
-
 function drawBackground() { 
 
 	backgroundImages.forEach((layer,index) => {
-			if (layer.x < -650) {
-				layer.x = 0;
-			}
+		if (layer.x < -650) {
+			layer.x = 0;
+		}
 
-			for (var i = 0; i < 2; i++) {
-              context.drawImage(layer.img, layer.x + i * layer.width, 0);
-           	}
+		for (var i = 0; i < 2; i++) {
+             context.drawImage(layer.img, layer.x + i * layer.width, 0);
+        }
 
-           	layer.x -= layer.speed;
+        layer.x -= layer.speed;
 
-           	if (layer.speed-index <= 7) {
-				layer.speed += 0.001;
-           	}
+        if (layer.speed-index <= 7) {
+			layer.speed += 0.001;
+        }
 
 	});
 
@@ -54,6 +47,7 @@ function drawBackground() {
 }
 
 function jump() { 
+	const jumpHeight = 100;
 	if (!isAttacking && !doneJumping) {
 		doneJumping = wizard.jump();
 		if (doneJumping) {
@@ -65,6 +59,7 @@ function jump() {
 }
 
 function attack() {
+	const attackCycleCount = 5;
 	attackCount++;
 	startFireball = wizard.attack();
 	if (attackCount >= attackCycleCount) {
@@ -130,19 +125,24 @@ function didMakeContact(object, item) {
 }
 
 function drawEnemies() {
-	enemyCount++;
+	const maxYPos = 130;
+	const minYPos = 260;
+	const enemyFrameThreshold = 75;
+	
+	wizard.hurt = false;	
+	enemyFrameCount++;
 
-	if (enemyCount > 75) {
-		let height = randomValue(260, 130);
-		enemies.push(new Sprite('./assets/enemies.png', enemySpeed, 650, height, 46, 55, 5, 771, 64, 77, 0, 100, 260)); 
-		let newHeight = randomValue(260,130);
+	if (enemyFrameCount > enemyFrameThreshold) {
+		let yPos = randomValue(maxYPos, minYPos);
+		enemies.push(new Sprite('./assets/enemies.png', enemySpeed, 650, yPos, 46, 55, 5, 771, 64, 77, 0)); 
+		let newYPos = randomValue(maxYPos, minYPos);
 		if (randomValue(2,1) === 2) {
-			while (Math.abs(height - newHeight) <= enemies[0].scaledHeight) {
-				newHeight = randomValue(260,130);
+			while (Math.abs(yPos - newYPos) <= enemies[0].scaledHeight) {
+				newYPos = randomValue(maxYPos, minYPos);
 			}
-			enemies.push(new Sprite('./assets/enemies.png', enemySpeed, 830, newHeight, 46, 55, 5, 771, 64, 77, 0, 100, 260)); 
+			enemies.push(new Sprite('./assets/enemies.png', enemySpeed, 830, newYPos, 46, 55, 5, 771, 64, 77, 0)); 
 		}
-		enemyCount = 0;
+		enemyFrameCount = 0;
 	}
 
 	enemies = enemies.filter((enemy) => {
@@ -151,7 +151,7 @@ function drawEnemies() {
 		enemySpeed += -0.0003;
 		
 		if (didMakeContact(enemy, wizard)) {
-			wizard.hurt();
+			wizard.hurt = true;
 		}
 
 		if ((enemy.x + enemy.scaledWidth) < 0) {
@@ -162,6 +162,9 @@ function drawEnemies() {
 }
 
 function drawUI() {
+	const jumpFrameThreshold = 1;
+	const attackFrameThreshold = 3;
+
 	frameCount++;
 	let frameThreshold = 60/backgroundImages[3].speed;
 
@@ -194,6 +197,9 @@ function drawUI() {
 }
 
 window.addEventListener('keydown', (event) => {
+	const spaceKey = 32;
+	const aKey = 65;
+
 	if (event.keyCode === spaceKey) {
 		event.preventDefault();
 		isJumping = true;

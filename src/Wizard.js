@@ -2,14 +2,16 @@ class Wizard extends Sprite {
 	constructor(img,speed=0, x=30, y=230, height=69, width=46, 
 				xSpriteCoord=70, ySpriteCoord=17, scaledHeight=120, scaledWidth=80,
 				yVelocity=0, maxHeight=100, minHeight=230,
-				walkIndex=0, jumpIndex=0, attackIndex=0) {
+				walkIndex=0, jumpIndex=0, attackIndex=0, hurt=false) {
 
 		super(img, speed, x, y, height, width, 
-			  xSpriteCoord, ySpriteCoord, scaledHeight, scaledWidth, yVelocity,
-			  maxHeight, minHeight);
+			  xSpriteCoord, ySpriteCoord, scaledHeight, scaledWidth, yVelocity);
+		this.maxHeight = maxHeight;
+		this.minHeight = minHeight;
 		this.walkIndex = walkIndex;
 		this.jumpIndex = jumpIndex;
 		this.attackIndex = attackIndex;
+		this.hurt = false;
 	}
 
 	walk() {
@@ -44,6 +46,7 @@ class Wizard extends Sprite {
 		this.ySpriteCoord = walkingSprite[this.walkIndex].ySpriteCoord;
 		this.width = walkingSprite[this.walkIndex].width;
 		this.height = walkingSprite[this.walkIndex].height;
+		this.checkIfHurt();
 		this.updateScaledValues();
 
 		this.drawFrame();
@@ -99,6 +102,7 @@ class Wizard extends Sprite {
 		this.ySpriteCoord = jumpingSprite[this.jumpIndex].ySpriteCoord;
 		this.width = jumpingSprite[this.jumpIndex].width;
 		this.height = jumpingSprite[this.jumpIndex].height;
+		this.checkIfHurt();
 		this.updateScaledValues();
 
 		this.yVelocity = jumpingSprite[this.jumpIndex].yVelocity;
@@ -162,8 +166,8 @@ class Wizard extends Sprite {
 		}
 		this.y += this.yVelocity;
 
+		this.checkIfHurt();
 		this.updateScaledValues();
-
 		this.drawFrame();
 
 		if (this.attackIndex === 1) {
@@ -178,8 +182,13 @@ class Wizard extends Sprite {
 		return startFireball;
 	}
 
-	hurt() {
-		console.log('hurt');
+	checkIfHurt() {
+		if (wizard.hurt) {
+			this.xSpriteCoord = 42;
+			this.ySpriteCoord = 201;
+			this.width = 46;
+			this.height = 63;
+		}
 	}
 
 	death() {
