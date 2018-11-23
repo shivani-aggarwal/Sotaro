@@ -183,7 +183,7 @@ class Wizard extends Sprite {
 	}
 
 	checkIfHurt() {
-		if (wizard.hurt) {
+		if (this.hurt) {
 			this.xSpriteCoord = 42;
 			this.ySpriteCoord = 201;
 			this.width = 46;
