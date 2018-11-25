@@ -191,8 +191,8 @@ class Wizard extends Sprite {
 		}
 	}
 
-	death() {
-		
+	dead() {
+		console.log('game over');
 	}
 
 }

@@ -3,11 +3,12 @@ const context = canvas.getContext("2d");
 
 let startGame = false;
 let backgroundImages = [
-		new MovingImage('./assets/backTrees.png',0),
-		new MovingImage('./assets/forestLights.png',1),
-		new MovingImage('./assets/middleTrees.png',2),
-		new MovingImage('./assets/frontTrees.png',3)
+		new Sprite('./assets/backTrees.png',0),
+		new Sprite('./assets/forestLights.png',1),
+		new Sprite('./assets/middleTrees.png',2),
+		new Sprite('./assets/frontTrees.png',3)
 	];
+let heart = new Sprite('./assets/heart.png', 0, 80, 27, 541, 600, 47, 87, 18, 20.4);
 let wizard = new Wizard('./assets/sotaroSprite.png');
 startScreen();
 
@@ -28,16 +29,19 @@ function startScreen() {
 	});
 	wizard.img.onload = function() {
 		wizard.init();
-		addCanvasText();
+		drawInGameInfo();
 	}
 }
 
 function start() {
 
+	let score = 0;
+	let lives = 3;
 	let fireballs = [];
 	let enemies = [];
 	let enemySpeed = -7;
 	enemies.push(new Sprite('./assets/enemies.png', enemySpeed, 650, randomValue(260,130), 46, 55, 5, 771, 64, 77, 0));
+	enemies[0].attackedWizard = false;
 
 	let frameCount = 0;
 	let attackCount = 0;
@@ -110,6 +114,9 @@ function start() {
 				enemies = enemies.filter((enemy) => {
 					if (didMakeContact(fireball, enemy)) {
 						enemy.speed = null;
+						if (enemy.x < canvas.width) {
+						 	score++;
+						} 
 					}
 					return enemy.speed !== null;
 				}); 
@@ -133,13 +140,17 @@ function start() {
 
 		if (enemyFrameCount > enemyFrameThreshold) {
 			let yPos = randomValue(maxYPos, minYPos);
-			enemies.push(new Sprite('./assets/enemies.png', enemySpeed, 650, yPos, 46, 55, 5, 771, 64, 77, 0)); 
+			let enemy = new Sprite('./assets/enemies.png', enemySpeed, 650, yPos, 46, 55, 5, 771, 64, 77, 0);
+			enemy.attackedWizard = false;
+			enemies.push(enemy); 
 			let newYPos = randomValue(maxYPos, minYPos);
 			if (randomValue(2,1) === 2) {
 				while (Math.abs(yPos - newYPos) <= enemies[0].scaledHeight) {
 					newYPos = randomValue(maxYPos, minYPos);
 				}
-				enemies.push(new Sprite('./assets/enemies.png', enemySpeed, 830, newYPos, 46, 55, 5, 771, 64, 77, 0)); 
+				newEnemy = new Sprite('./assets/enemies.png', enemySpeed, 830, newYPos, 46, 55, 5, 771, 64, 77, 0);
+				newEnemy.attackedWizard = false;
+				enemies.push(newEnemy); 
 			}
 			enemyFrameCount = 0;
 		}
@@ -151,6 +162,10 @@ function start() {
 			
 			if (didMakeContact(enemy, wizard)) {
 				wizard.hurt = true;
+				if (enemy.attackedWizard === false) {
+					(lives > 1) ? lives-- : (lives--, endGame());
+				}
+				enemy.attackedWizard = true;
 			}
 
 			if ((enemy.x + enemy.scaledWidth) < 0) {
@@ -169,7 +184,7 @@ function start() {
 
 		drawBackground();
 		wizard.init();
-		addCanvasText();
+		drawInGameInfo(score, lives);
 		drawEnemies();
 
 		if (startFireball) {
@@ -214,6 +229,10 @@ function start() {
 	window.requestAnimationFrame(drawUI);
 }
 
+function endGame() {
+	wizard.dead();
+}
+
 function randomValue(max, min) {
 	return Math.floor(Math.random()*(max-min+1)) + min;
 }
@@ -240,7 +259,7 @@ function didMakeContact(object, item) {
 	return contact;
 }
 
-function addCanvasText(score=0) {
+function drawInGameInfo(score=0, lives=3) {
 	const livesText = "Lives: ";
 	const scoreText = "Score: ";
 	const x = 30;
@@ -256,4 +275,10 @@ function addCanvasText(score=0) {
 	context.fillText(livesText, x, y);
 	context.fillText(scoreText, x, y+30);
 	context.fillText(score, x+55, y+30);
+
+	for (let i=0; i < lives; i++) {
+		heart.drawFrame();
+		heart.x += heart.scaledWidth + 3; 
+	} 
+	heart.x = 80;
 }
