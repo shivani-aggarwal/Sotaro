@@ -1,0 +1,40 @@
+html {
+	background: #efe0c2;
+}
+
+h1 {
+	text-align: center;
+	color: #262626;
+	font-family: "Enriqueta", serif;
+	font-size: 50px;
+	line-height: 48px;
+	margin: 0 0 20px;
+}
+
+div p {
+	margin: 4px;
+	color: #2f2f2f;
+	font-family: Georgia, serif;
+	font-size: 17px;
+	line-height: 24px;
+}
+
+#screen {
+	border: 1px solid black;
+}
+
+.container {
+	display: flex;
+	flex-flow: column wrap;
+	justify-content: center;
+}
+
+.canvas {
+    align-self: center;
+    width: 650px;
+    height: 382px;
+}
+
+.footer {
+	align-self: center;
+}

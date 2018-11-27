@@ -8,7 +8,7 @@ let backgroundImages = [
 		new Sprite('./assets/middleTrees.png',2),
 		new Sprite('./assets/frontTrees.png',3)
 	];
-let heart = new Sprite('./assets/heart.png', 0, 80, 27, 541, 600, 47, 87, 18, 20.4);
+let heart = new Sprite('./assets/heart.png', 0, 90, 27, 541, 600, 47, 87, 18, 20.4);
 let wizard = new Wizard('./assets/sotaroSprite.png');
 startScreen();
 
@@ -29,6 +29,7 @@ function startScreen() {
 	});
 	wizard.img.onload = function() {
 		wizard.init();
+		addStartText();
 		drawInGameInfo();
 	}
 }
@@ -259,26 +260,41 @@ function didMakeContact(object, item) {
 	return contact;
 }
 
+function applyFontStyles() {
+	context.font = "15pt Georgia";
+	context.strokeStyle = "black";
+	context.lineWidth = 3;
+	context.fillStyle = "white";
+}
+
+function addStartText() {
+	const x = canvas.width/2;
+	const y = canvas.height/2;
+	applyFontStyles();
+	context.textAlign = "center";
+	addText("Press any key to start", x, y);
+}
+
+function addText(text, x, y) {
+	context.strokeText(text, x, y);
+	context.fillText(text, x, y);
+}
+
 function drawInGameInfo(score=0, lives=3) {
 	const livesText = "Lives: ";
 	const scoreText = "Score: ";
 	const x = 30;
 	const y = 40;
 
-	context.font = "15pt Calibri";
-	context.strokeStyle = "black";
-	context.lineWidth = 3;
-	context.strokeText(livesText, x, y);
-	context.strokeText(scoreText, x, y+30);
-	context.strokeText(score, x+55, y+30);
-	context.fillStyle = "white";
-	context.fillText(livesText, x, y);
-	context.fillText(scoreText, x, y+30);
-	context.fillText(score, x+55, y+30);
+	applyFontStyles();
+	context.textAlign = "start";
+	addText(livesText, x, y);
+	addText(scoreText, x, y+30);
+	addText(score, x+65, y+29);
 
 	for (let i=0; i < lives; i++) {
 		heart.drawFrame();
 		heart.x += heart.scaledWidth + 3; 
 	} 
-	heart.x = 80;
+	heart.x = 90;
 }

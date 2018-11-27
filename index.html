@@ -2,11 +2,21 @@
 <html>
 <head>
 	<title>Sotaro</title>
+	<link href='http://fonts.googleapis.com/css?family=Enriqueta:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="./index.css">
 </head>
 <body>
-	<canvas id="screen" width="650" height="382">
-		Your browser does not support canvas. Please try again with a different browser.
-	</canvas>
+	<div class="container">
+		<div class="canvas">
+			<h1>Sotaro</h1>
+			<canvas id="screen" width="650" height="382">
+				Your browser does not support canvas. Please try again with a different browser.
+			</canvas>
+			<p>Help Sotaro defeat the ghosts and escape the forest!</p>
+			<p>Press [space] to jump and [a] to attack</p>
+		</div>
+		<footer class="footer"></footer>
+	</div>
 	<script type="text/javascript" src="./src/Sprite.js"></script>
 	<script type="text/javascript" src="./src/Wizard.js"></script>
 	<script type="text/javascript" src="index.js"></script>
