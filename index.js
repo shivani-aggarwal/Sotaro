@@ -1,5 +1,7 @@
 const canvas = document.getElementById("screen");
 const context = canvas.getContext("2d");
+const endScreen = document.getElementById("endScreen");
+const endScore = document.getElementById("score");
 
 let startGame = false;
 let backgroundImages = [
@@ -21,14 +23,14 @@ window.addEventListener('keydown', (event) => {
 });
 
 function startScreen() {
-
+	
 	backgroundImages.forEach((layer, index) => {
 		layer.img.onload = function() {
 			context.drawImage(layer.img, 0, 0);
 		}
 	});
 	wizard.img.onload = function() {
-		wizard.init();
+		wizard.drawFrame();
 		addStartText();
 		drawInGameInfo();
 	}
@@ -53,6 +55,8 @@ function start() {
 	let isAttacking = false;
 	let startFireball = false;
 	let fireballMoving = false;
+	let gameOver = false;
+	let showEndScreen = false;
 
 	function drawBackground() { 
 
@@ -73,7 +77,6 @@ function start() {
 
 		});
 
-		window.requestAnimationFrame(drawUI);
 	}
 
 	function jumpAnimation() { 
@@ -164,7 +167,7 @@ function start() {
 			if (didMakeContact(enemy, wizard)) {
 				wizard.hurt = true;
 				if (enemy.attackedWizard === false) {
-					(lives > 1) ? lives-- : (lives--, endGame());
+					(lives > 1) ? lives-- : (lives--, gameOver=true);
 				}
 				enemy.attackedWizard = true;
 			}
@@ -183,32 +186,51 @@ function start() {
 		frameCount++;
 		let frameThreshold = 60/backgroundImages[3].speed;
 
+		context.clearRect(0,0, canvas.width, canvas.height);
+
 		drawBackground();
-		wizard.init();
+		wizard.drawFrame();
 		drawInGameInfo(score, lives);
 		drawEnemies();
 
-		if (startFireball) {
-			startFireball = false;
-			fireballMoving = true;
-			let x = wizard.x + wizard.width + 45;
-			let y = wizard.y + 54;
-			fireballs.push(new Sprite('./assets/sotaroSprite.png', 10, x, y, 17, 26, 482, 584));
-			fireballAnimation(fireballs); 
+		if (gameOver && wizard.y >= 230 && frameCount > 10) {
+			frameCount = 0;
+			showEndScreen = wizard.dead();
 		}
-		else if (fireballMoving) {
-			fireballAnimation(fireballs);
+		else {
+			if (startFireball && !gameOver) {
+				startFireball = false;
+				fireballMoving = true;
+				let x = wizard.x + wizard.width + 45;
+				let y = wizard.y + 54;
+				fireballs.push(new Sprite('./assets/sotaroSprite.png', 10, x, y, 17, 26, 482, 584));
+				fireballAnimation(fireballs); 
+			}
+			else if (fireballMoving) {
+				fireballAnimation(fireballs);
+			}
+
+			if (isAttacking && frameCount > attackFrameThreshold) {
+				attackAnimation();
+			}
+			else if (isJumping && frameCount > jumpFrameThreshold) {
+				jumpAnimation();
+			}
+		    else if (frameCount > frameThreshold) {
+				wizard.walk();
+				frameCount = 0;
+			}
 		}
 
-		if (isAttacking && frameCount > attackFrameThreshold) {
-			attackAnimation();
+		if (showEndScreen) {
+			drawBackground();
+			wizard.drawFrame();
+			drawInGameInfo(score, lives);
+			drawEnemies();
+			endGame(score);
 		}
-		else if (isJumping && frameCount > jumpFrameThreshold) {
-			jumpAnimation();
-		}
-	    else if (frameCount > frameThreshold) {
-			wizard.walk();
-			frameCount = 0;
+		else {
+			window.requestAnimationFrame(drawUI);
 		}
 	}
 
@@ -226,12 +248,8 @@ function start() {
 			isAttacking = true;
 		}
 	}, false);
-
+	
 	window.requestAnimationFrame(drawUI);
-}
-
-function endGame() {
-	wizard.dead();
 }
 
 function randomValue(max, min) {
@@ -260,6 +278,11 @@ function didMakeContact(object, item) {
 	return contact;
 }
 
+function endGame(score) {
+	endScreen.style.display = "inline-block";
+	endScore.innerHTML = `Score: ${score}`;
+}
+
 function applyFontStyles() {
 	context.font = "15pt Georgia";
 	context.strokeStyle = "black";
@@ -270,12 +293,12 @@ function applyFontStyles() {
 function addStartText() {
 	const x = canvas.width/2;
 	const y = canvas.height/2;
-	applyFontStyles();
 	context.textAlign = "center";
 	addText("Press any key to start", x, y);
 }
 
 function addText(text, x, y) {
+	applyFontStyles();
 	context.strokeText(text, x, y);
 	context.fillText(text, x, y);
 }
@@ -286,7 +309,6 @@ function drawInGameInfo(score=0, lives=3) {
 	const x = 30;
 	const y = 40;
 
-	applyFontStyles();
 	context.textAlign = "start";
 	addText(livesText, x, y);
 	addText(scoreText, x, y+30);

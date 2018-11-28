@@ -1,5 +1,6 @@
 html {
 	background: #efe0c2;
+	font-family: "Georgia", serif;
 }
 
 h1 {
@@ -11,16 +12,48 @@ h1 {
 	margin: 0 0 20px;
 }
 
+h2 {
+	font-size: 15pt;
+	color: #262626;
+	text-align: center;
+}
+
 div p {
 	margin: 4px;
 	color: #2f2f2f;
-	font-family: Georgia, serif;
 	font-size: 17px;
 	line-height: 24px;
 }
 
+button {
+	height: 40px;
+	width: 35%;
+	font-size: 14px;
+	font-family: "Georgia", serif;
+	border-color: #2f2f2f;
+	border-radius: 5px;
+	margin-top: 10px;
+}
+
 #screen {
-	border: 1px solid black;
+	border: 1px solid #2f2f2f;
+}
+
+#endScreen {
+	display: none;
+	height: 45%;
+	width: 40%;
+	top: 25%;
+	left: 30%;
+	border: 1px solid #2f2f2f; 
+	border-radius: 10px;
+	background-color: #D3D3D3;
+	position: absolute;
+}
+
+.buttons {
+	display: flex;
+	justify-content: space-around;
 }
 
 .container {
@@ -33,6 +66,7 @@ div p {
     align-self: center;
     width: 650px;
     height: 382px;
+    position: relative;
 }
 
 .footer {

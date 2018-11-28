@@ -2,7 +2,7 @@ class Wizard extends Sprite {
 	constructor(img,speed=0, x=30, y=230, height=69, width=46, 
 				xSpriteCoord=70, ySpriteCoord=17, scaledHeight=120, scaledWidth=80,
 				yVelocity=0, maxHeight=100, minHeight=230,
-				walkIndex=0, jumpIndex=0, attackIndex=0, hurt=false) {
+				walkIndex=0, jumpIndex=0, attackIndex=0, deadIndex=0, hurt=false) {
 
 		super(img, speed, x, y, height, width, 
 			  xSpriteCoord, ySpriteCoord, scaledHeight, scaledWidth, yVelocity);
@@ -11,6 +11,7 @@ class Wizard extends Sprite {
 		this.walkIndex = walkIndex;
 		this.jumpIndex = jumpIndex;
 		this.attackIndex = attackIndex;
+		this.deadIndex = deadIndex;
 		this.hurt = false;
 	}
 
@@ -192,7 +193,47 @@ class Wizard extends Sprite {
 	}
 
 	dead() {
-		console.log('game over');
+		let complete = false;
+		const deadSprite = [
+			{
+				xSpriteCoord: 93,
+				ySpriteCoord: 289,
+				width: 45,
+				height: 62
+			},
+			{
+				xSpriteCoord: 147,
+				ySpriteCoord: 315,
+				width: 76,
+				height: 34
+			},
+			{
+				xSpriteCoord: 230,
+				ySpriteCoord: 320,
+				width: 75,
+				height: 28
+			}
+		];
+
+		if (this.deadIndex > 0) {
+			this.y = 300;
+		}
+
+		this.xSpriteCoord = deadSprite[this.deadIndex].xSpriteCoord;
+		this.ySpriteCoord = deadSprite[this.deadIndex].ySpriteCoord;
+		this.width = deadSprite[this.deadIndex].width;
+		this.height = deadSprite[this.deadIndex].height;
+		this.updateScaledValues();
+
+		this.drawFrame();
+
+		this.deadIndex++;
+		if (this.deadIndex >= deadSprite.length) {
+			this.deadIndex = 0;
+			complete = true;
+		}
+
+		return complete;
 	}
 
 }

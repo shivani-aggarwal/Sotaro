@@ -43,8 +43,4 @@ class Sprite {
 			this.scaledHeight
 		);
 	}
-
-	init() {
-		this.drawFrame();
-	}
 }
