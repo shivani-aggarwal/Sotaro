@@ -1,7 +1,11 @@
 const canvas = document.getElementById("screen");
 const context = canvas.getContext("2d");
+
 const endScreen = document.getElementById("endScreen");
 const endScore = document.getElementById("score");
+const playAgain = document.getElementById("playagain");
+const submitScore = document.getElementById("submitscore");
+const leaderboard = document.getElementById("leaderboard");
 
 let startGame = false;
 let backgroundImages = [
@@ -37,6 +41,13 @@ function startScreen() {
 }
 
 function start() {
+	backgroundImages = [
+		new Sprite('./assets/backTrees.png',0),
+		new Sprite('./assets/forestLights.png',1),
+		new Sprite('./assets/middleTrees.png',2),
+		new Sprite('./assets/frontTrees.png',3)
+	];
+	wizard = new Wizard('./assets/sotaroSprite.png');
 
 	let score = 0;
 	let lives = 3;
@@ -281,6 +292,10 @@ function didMakeContact(object, item) {
 function endGame(score) {
 	endScreen.style.display = "inline-block";
 	endScore.innerHTML = `Score: ${score}`;
+	playAgain.onclick = () => {
+		endScreen.style.display = "none";
+		start();
+	};
 }
 
 function applyFontStyles() {

@@ -27,8 +27,8 @@ div p {
 
 button {
 	height: 40px;
-	width: 35%;
-	font-size: 14px;
+	width: 30%;
+	font-size: 13px;
 	font-family: "Georgia", serif;
 	border-color: #2f2f2f;
 	border-radius: 5px;
@@ -42,9 +42,9 @@ button {
 #endScreen {
 	display: none;
 	height: 45%;
-	width: 40%;
+	width: 45%;
 	top: 25%;
-	left: 30%;
+	left: 25%;
 	border: 1px solid #2f2f2f; 
 	border-radius: 10px;
 	background-color: #D3D3D3;
