@@ -3,6 +3,10 @@ const context = canvas.getContext("2d");
 
 const endScreen = document.getElementById("endScreen");
 const endScore = document.getElementById("score");
+const form = document.getElementById("form")
+
+const buttons = document.querySelectorAll(".buttons");
+const backButton = document.querySelector(".back");
 const playAgain = document.getElementById("playagain");
 const submitScore = document.getElementById("submitscore");
 const leaderboard = document.getElementById("leaderboard");
@@ -293,6 +297,28 @@ function endGame(score) {
 		endScreen.style.display = "none";
 		start();
 	};
+	submitscore.onclick = () => {
+		changeEndScreenStyle();
+		backButton.onclick = () => {
+			changeEndScreenStyle();
+			endGame(score);
+		};
+	};
+}
+
+function changeEndScreenStyle() {
+	if (endScreen.style.height === "50%") {
+		endScreen.style.height = "45%";
+		buttons[0].style.display = "flex";
+		buttons[1].style.display = "none";
+		form.style.display = "none";
+	}
+	else {
+		endScreen.style.height = "50%";
+		buttons[0].style.display = "none";
+		buttons[1].style.display = "flex";
+		form.style.display = "flex";
+	}
 }
 
 function applyFontStyles() {

@@ -18,6 +18,15 @@ h2 {
 	text-align: center;
 }
 
+h3 {
+	font-size: 12pt;
+	font-family: "Helvetica", serif;
+	color: #262626;
+	text-align: center;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
 div p {
 	margin: 4px;
 	color: #2f2f2f;
@@ -34,7 +43,7 @@ button {
 	border-radius: 5px;
 	margin-top: 10px;
 }
-
+ 
 #screen {
 	border: 1px solid #2f2f2f;
 }
@@ -51,9 +60,20 @@ button {
 	position: absolute;
 }
 
+#form {
+	display: none;
+	justify-content: center;
+	flex: 1;
+}
+
+.back {
+	margin-right: 8px
+}
+
 .buttons {
 	display: flex;
-	justify-content: space-around;
+	flex: 1;
+	justify-content: center;
 }
 
 .container {
@@ -67,6 +87,16 @@ button {
     width: 650px;
     height: 382px;
     position: relative;
+}
+
+.formInput {
+	border-radius: 2px;
+	font-family: "Georgia", serif;
+	margin-left: 5px;
+}
+
+.hidden {
+	display: none;
 }
 
 .footer {
