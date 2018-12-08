@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sotaro</title>
+	<link href='http://fonts.googleapis.com/css?family=Enriqueta:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Sotaro</h1>
+		<div class="canvas">
+			<canvas id="screen" width="650" height="382">
+				Your browser does not support canvas. Please try again with a different browser.
+			</canvas>
+			<div id="endScreen">
+				<h2>Game Over!</h2>
+				<h2 id="score">Score: 999</h2>
+				<div class="buttons">
+					<button id="playagain">Play Again</button>
+					<button id="submitscore">Submit Score</button>
+					<button id="leaderboard">Leaderboard</button>
+				</div>
+			</div>
+			<p>Help Sotaro defeat the ghosts and escape the forest!</p>
+			<p>Press [space] to jump and [a] to attack</p>
+		</div>
+		<footer class="footer"></footer>
+	</div>
+	<script type="text/javascript" src="./js/Sprite.js"></script>
+	<script type="text/javascript" src="./js/Wizard.js"></script>
+	<script type="text/javascript" src="./js/index.js"></script>
+</body>
+</html>
