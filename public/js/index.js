@@ -1,16 +1,6 @@
 const canvas = document.getElementById("screen");
 const context = canvas.getContext("2d");
 
-const endScreen = document.getElementById("endScreen");
-const endScore = document.getElementById("score");
-const form = document.getElementById("form")
-
-const buttons = document.querySelectorAll(".buttons");
-const backButton = document.querySelector(".back");
-const playAgain = document.getElementById("playagain");
-const submitScore = document.getElementById("submitscore");
-const leaderboard = document.getElementById("leaderboard");
-
 let startGame = false;
 let backgroundImages = [
 		new Sprite('../assets/backTrees.png',0),
@@ -291,22 +281,46 @@ function didMakeContact(object, item) {
 }
 
 function endGame(score) {
+	const endScreen = document.getElementById("endScreen");
+	const endScore = document.getElementById("score");
+	const nameInput = document.querySelector(".formInput");
+
+	const backButton = document.querySelector(".back");
+	const playAgain = document.getElementById("playagain");
+	const submitScore = document.getElementById("submitscore");
+	const leaderboard = document.getElementById("leaderboard");
+	const submitForm = document.getElementById("submitform");
+
 	endScreen.style.display = "inline-block";
 	endScore.innerHTML = `Score: ${score}`;
 	playAgain.onclick = () => {
 		endScreen.style.display = "none";
 		start();
 	};
-	submitscore.onclick = () => {
-		changeEndScreenStyle();
-		backButton.onclick = () => {
-			changeEndScreenStyle();
-			endGame(score);
-		};
+	backButton.onclick = () => {
+		changeEndScreenStyle(endScreen);
+		endGame(score);
 	};
+	submitScore.onclick = () => {
+		changeEndScreenStyle(endScreen);
+	};
+	submitForm.onclick = () => {
+		if (nameInput.value !== "") {
+			const url = "http://localhost:3000/submit"
+			const params = `name=${nameInput.value}&score=${score}`;
+			fetch(url, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: params
+			}).then(console.log("form submitted"));
+		}
+	}
 }
 
-function changeEndScreenStyle() {
+function changeEndScreenStyle(endScreen) {
+	const buttons = document.querySelectorAll(".buttons");
+	const form = document.getElementById("form");
+
 	if (endScreen.style.height === "50%") {
 		endScreen.style.height = "45%";
 		buttons[0].style.display = "flex";
