@@ -282,13 +282,18 @@ function didMakeContact(object, item) {
 
 function endGame(score) {
 	const endScreen = document.getElementById("endScreen");
-	const endScore = document.getElementById("score");
-	const nameInput = document.querySelector(".formInput");
+	const buttons = document.querySelectorAll(".buttons");
 
-	const backButton = document.querySelector(".back");
+	const gameOver = document.getElementById("gameOver");
+	const endScore = document.getElementById("score");
+	const leaderboardPage = document.getElementById("leaderboardPage");
+	const form = document.getElementById("form");
+	const nameInput = document.querySelector(".formInput");
+	
+	const backButton = document.querySelectorAll(".back");
 	const playAgain = document.getElementById("playagain");
 	const submitScore = document.getElementById("submitscore");
-	const leaderboard = document.getElementById("leaderboard");
+	const leaderboardButton = document.getElementById("leaderboard");
 	const submitForm = document.getElementById("submitform");
 
 	endScreen.style.display = "inline-block";
@@ -297,12 +302,20 @@ function endGame(score) {
 		endScreen.style.display = "none";
 		start();
 	};
-	backButton.onclick = () => {
-		changeEndScreenStyle(endScreen);
+	backButton[0].onclick = () => {
+		endScreen.style.height = "45%";
+		changeDisplay([form, buttons[0], buttons[1]], ["none", "flex", "none"]);
+		endGame(score);
+	};
+	backButton[1].onclick = () => {
+		endScreen.style.height = "45%";
+		changeDisplay([leaderboardPage, buttons[0], backButton[1], endScore], ["none", "flex", "none", ""]);
+		gameOver.innerHTML = "Game Over!";
 		endGame(score);
 	};
 	submitScore.onclick = () => {
-		changeEndScreenStyle(endScreen);
+		endScreen.style.height = "50%";
+		changeDisplay([form, buttons[0], buttons[1]], ["flex", "none", "flex"]);
 	};
 	submitForm.onclick = () => {
 		if (nameInput.value !== "") {
@@ -314,25 +327,19 @@ function endGame(score) {
 				body: params
 			}).then(console.log("form submitted"));
 		}
-	}
+	};
+	leaderboardButton.onclick = () => {
+		endScreen.style.height = "62%";
+		changeDisplay([leaderboardPage, buttons[0], buttons[2], backButton[1], endScore],
+			["flex", "none", "flex", "inline-block", "none"]);
+		gameOver.innerHTML = "Leaderboard";
+	};
 }
 
-function changeEndScreenStyle(endScreen) {
-	const buttons = document.querySelectorAll(".buttons");
-	const form = document.getElementById("form");
-
-	if (endScreen.style.height === "50%") {
-		endScreen.style.height = "45%";
-		buttons[0].style.display = "flex";
-		buttons[1].style.display = "none";
-		form.style.display = "none";
-	}
-	else {
-		endScreen.style.height = "50%";
-		buttons[0].style.display = "none";
-		buttons[1].style.display = "flex";
-		form.style.display = "flex";
-	}
+function changeDisplay(elements, displays) {
+	elements.forEach((element, index) => {
+		element.style.display = displays[index];
+	});
 }
 
 function applyFontStyles() {
