@@ -11,8 +11,20 @@ app.get('/', function(req, res) {
 });
 
 app.post('/submit', function(req, res) {
-	console.log('name', req.body.name);
-	console.log('score', req.body.score);
+	const name = req.body.name;
+	const score = req.body.score;
+	// save info to database
+	res.redirect(`http://localhost:3000/leaderboard/${name}/${score}`);
+});
+
+app.get('/leaderboard/:name/:score', function(req, res) {
+	// send top 4 + info submitted
+	console.log('name and score received');
+});
+
+app.get('/leaderboard', function(req, res) {
+	// send top 5
+	console.log('get req received');
 });
 
 app.listen(port, () => {

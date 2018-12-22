@@ -1,6 +1,3 @@
-const canvas = document.getElementById("screen");
-const context = canvas.getContext("2d");
-
 let startGame = false;
 let backgroundImages = [
 		new Sprite('../assets/backTrees.png',0),
@@ -291,15 +288,21 @@ function endGame(score) {
 	const nameInput = document.querySelector(".formInput");
 	
 	const backButton = document.querySelectorAll(".back");
-	const playAgain = document.getElementById("playagain");
+	const playAgain = document.querySelectorAll(".playagain");
 	const submitScore = document.getElementById("submitscore");
 	const leaderboardButton = document.getElementById("leaderboard");
 	const submitForm = document.getElementById("submitform");
 
 	endScreen.style.display = "inline-block";
 	endScore.innerHTML = `Score: ${score}`;
-	playAgain.onclick = () => {
+	playAgain[0].onclick = () => {
 		endScreen.style.display = "none";
+		start();
+	};
+	playAgain[1].onclick = () => {
+		endScreen.style.height = "45%";
+		changeDisplay([leaderboardPage, buttons[0], playAgain[1], endScore, endScreen], ["none", "flex", "none", "", "none"]);
+		gameOver.innerHTML = "Game Over!";
 		start();
 	};
 	backButton[0].onclick = () => {
@@ -325,15 +328,26 @@ function endGame(score) {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: params
-			}).then(console.log("form submitted"));
+			}).then(
+				endScreen.style.height = "45%",
+				changeDisplay([form, buttons[0], buttons[1]], ["none", "flex", "none"]),
+				endGame(score),
+				leaderboard(endScreen, gameOver, buttons, playAgain, endScore)
+			);
 		}
 	};
 	leaderboardButton.onclick = () => {
-		endScreen.style.height = "62%";
-		changeDisplay([leaderboardPage, buttons[0], buttons[2], backButton[1], endScore],
-			["flex", "none", "flex", "inline-block", "none"]);
-		gameOver.innerHTML = "Leaderboard";
+		fetch("http://localhost:3000/leaderboard").then(
+			leaderboard(endScreen, gameOver, buttons, backButton, endScore)
+		);
 	};
+}
+
+function leaderboard(endScreen, gameOver, buttons, bottomButton, endScore) {
+	endScreen.style.height = "62%";
+	changeDisplay([leaderboardPage, buttons[0], buttons[2], bottomButton[1], endScore],
+			["flex", "none", "flex", "inline-block", "none"]);
+	gameOver.innerHTML = "Leaderboard";
 }
 
 function changeDisplay(elements, displays) {

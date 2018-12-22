@@ -16,7 +16,7 @@
 				<h2 id="gameOver">Game Over!</h2>
 				<h2 id="score">Score: 999</h2>
 				<div class="buttons">
-					<button id="playagain">Play Again</button>
+					<button class="playagain">Play Again</button>
 					<button id="submitscore" style="margin-left: 8px; margin-right: 8px">Submit Score</button>
 					<button id="leaderboard">Leaderboard</button>
 				</div>
@@ -33,33 +33,40 @@
 				<div id="leaderboardPage" class="hidden"> 
 					<table>
 						<tr>
+							<th>Rank</th>
 							<th>Name</th>
 							<th>Score</th>
 						</tr>
 						<tr>
 							<td>1</td>
+							<td>Guest</td>
+							<td>0</td>
+						</tr>
+						<tr>
 							<td>2</td>
+							<td>Guest</td>
+							<td>0</td>
 						</tr>
 						<tr>
 							<td>3</td>
+							<td>Guest</td>
+							<td>0</td>
+						</tr>
+						<tr>
 							<td>4</td>
+							<td>Guest</td>
+							<td>0</td>
 						</tr>
 						<tr>
 							<td>5</td>
-							<td>6</td>
-						</tr>
-						<tr>
-							<td>7</td>
-							<td>8</td>
-						</tr>
-						<tr>
-							<td>9</td>
-							<td>10</td>
+							<td>Guest</td>
+							<td>0</td>
 						</tr>
 					</table> 
 				</div>
-				<div class="buttons hidden">
-					<button class="back">Back</button>
+				<div class="buttons">
+					<button class="back hidden">Back</button>
+					<button class="playagain hidden">Play Again</button>
 				</div>
 			</div>
 			<p>Help Sotaro defeat the ghosts and escape the forest!</p>
@@ -67,6 +74,10 @@
 		</div>
 		<footer class="footer"></footer>
 	</div>
+	<script>
+		const canvas = document.getElementById("screen");
+		const context = canvas.getContext("2d");
+	</script>
 	<script type="text/javascript" src="./js/Sprite.js"></script>
 	<script type="text/javascript" src="./js/Wizard.js"></script>
 	<script type="text/javascript" src="./js/index.js"></script>
