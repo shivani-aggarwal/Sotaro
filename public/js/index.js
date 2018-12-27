@@ -7,10 +7,10 @@ let backgroundImages = [
 	];
 let heart = new Sprite('../assets/heart.png', 0, 90, 27, 541, 600, 47, 87, 18, 20.4);
 let wizard = new Wizard('../assets/sotaroSprite.png');
-
+ 
 window.addEventListener('load', () => {
-		graphics.drawStartScreen(wizard, backgroundImages);
-	}, false);
+	graphics.drawStartScreen(wizard, backgroundImages);
+}, false);
 
 window.addEventListener('keydown', (event) => {
 	if (!startGame) {
@@ -22,7 +22,7 @@ window.addEventListener('keydown', (event) => {
 
 function randomValue(max, min) {
 	return Math.floor(Math.random()*(max-min+1)) + min;
-}
+};
 
 function didMakeContact(object, item) {
 	let rect1 = {
@@ -44,4 +44,4 @@ function didMakeContact(object, item) {
                 rect1.top > rect2.bottom);
 
 	return contact;
-}
+};

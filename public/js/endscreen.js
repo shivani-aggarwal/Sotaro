@@ -58,9 +58,13 @@ function endGame(score) {
 		}
 	};
 	leaderboardButton.onclick = () => {
-		fetch("http://localhost:3000/leaderboard").then(
-			leaderboard(endScreen, gameOver, buttons, backButton, endScore)
-		);
+		fetch("http://localhost:3000/leaderboard")
+			.then((res) => res.json())
+			.then((data) => {
+				console.log(data),
+				//TODO: pass data to leaderboard
+				leaderboard(endScreen, gameOver, buttons, backButton, endScore)
+			});
 	};
 }
 
