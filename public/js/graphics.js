@@ -14,19 +14,25 @@ const graphics = {
 			if (layer.x < -650) {
 				layer.x = 0;
 			}
-
 			for (var i = 0; i < 2; i++) {
 	            context.drawImage(layer.img, layer.x + i * layer.width, 0);
 	        }
-
 	        layer.x -= layer.speed;
-
 	        if (layer.speed-index <= 7) {
 				layer.speed += 0.001;
 	        }
 
 		});
 
+	},
+
+	displayTable: (data) => {
+		const tableRows = document.getElementsByTagName("tr");
+		for (let i=1; i<tableRows.length; i++) {
+			(data[i-1].rank) ? tableRows[i].cells[0].innerHTML = data[i-1].rank : tableRows[i].cells[0].innerHTML = i;
+			tableRows[i].cells[1].innerHTML = data[i-1].name;
+			tableRows[i].cells[2].innerHTML = data[i-1].score;
+		}
 	},
 
 	changeDisplay: (elements, displays) => {

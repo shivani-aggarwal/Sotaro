@@ -19,7 +19,7 @@ app.post('/submit', function(req, res) {
 	});
 	newEntry.save((err, room) => {
 		if (err) {
-			console.log('Error saving entry to database');
+			console.log('Error saving entry: ', err);
 		}
 		else {
 			res.redirect(`http://localhost:3000/leaderboard/${room._id}`);
@@ -28,26 +28,33 @@ app.post('/submit', function(req, res) {
 });
 
 app.get('/leaderboard/:id', function(req, res) {
-	console.log(req.params.id);
-	// TODO: send top 4 + entry submitted
-	// Leaderboard
-	// 	.find({})
-	// 	.sort({score: -1})
-	// 	.limit(4)
-	// 	.then((entries) => {
-	// 		console.log(entries)
-	// 	})
-	// 	.catch((err) => {
-	// 		console.log('Error finding entries')
-	// 	});
-	// Leaderboard
-	// 	.findById(req.params.id)
-	// 	.then((entry) => {
-	// 		console.log(entry)
-	// 	})
-	// 	.catch((err) => {
-	// 		console.log('Error finding entry saved')
-	// 	});
+	res.setHeader('Content-Type', 'application/json');
+	Leaderboard
+		.find({})
+		.sort({score: -1})
+		.then((entries) => {
+			const index = entries.map(entry => entry._id.toString()).indexOf(req.params.id)
+			let topEntries = [];
+			if (index > 5) {
+				topEntries = entries.slice(0,4).map(entry => {
+					return { name: entry.name, score: entry.score };
+				})
+				topEntries.push({ name: entries[index].name, score: entries[index].score, rank: index+1 })
+			}
+			else if (index > -1) {
+				topEntries = entries.slice(0,index).map(entry => {
+					return { name: entry.name, score: entry.score }
+				})
+				topEntries.push({ name: entries[index].name, score: entries[index].score, rank: index+1 })
+				entries.slice(index,6).forEach((entry) => {
+					topEntries.push({name: entry.name, score: entry.score})
+				})
+			}
+			res.status(200).send(JSON.stringify(topEntries));
+		})
+		.catch((err) => {
+			console.log('Error: ', err)
+		});
 });
 
 app.get('/leaderboard', function(req, res) {
@@ -57,15 +64,14 @@ app.get('/leaderboard', function(req, res) {
 		.sort({score: -1})
 		.limit(5)
 		.then((entries) => {
-			console.log('Top 5 entries: ' + entries),
-			res.send(200, JSON.stringify( 
-				entries.map((entry) => {
+			res.status(200).send(JSON.stringify( 
+				entries.map(entry => {
 					return { name: entry.name, score: entry.score }
 				})
 			));
 		})
 		.catch((err) => {
-			console.log('Error finding entries')
+			console.log('Error: ', err)
 			res.sendStatus(404);
 		});
 });

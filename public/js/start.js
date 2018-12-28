@@ -54,7 +54,6 @@ const start = () => {
 	}
 
 	function fireballAnimation(fireballArray) {
-
 		fireballArray = fireballArray.filter((fireball) => {
 			fireball.updateScaledValues();
 			fireball.drawFrame();
