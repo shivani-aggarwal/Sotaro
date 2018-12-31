@@ -1,4 +1,6 @@
-class Wizard extends Sprite {
+const Sprite = require('./Sprite.js');
+
+module.exports = class Wizard extends Sprite {
 	constructor(img,speed=0, x=30, y=230, height=69, width=46, 
 				xSpriteCoord=70, ySpriteCoord=17, scaledHeight=120, scaledWidth=80,
 				yVelocity=0, maxHeight=100, minHeight=230,

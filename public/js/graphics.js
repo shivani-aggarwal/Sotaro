@@ -1,12 +1,12 @@
 const graphics = {
-	drawStartScreen: (wizard, images) => {
+	drawStartScreen: (wizard, images, heart) => {
 		images.forEach((layer, index) => {
 			context.drawImage(layer.img, 0, 0);
 		});
 
 		wizard.drawFrame();
 		graphics.addStartText();
-		graphics.drawInGameInfo();
+		graphics.drawInGameInfo(0,3,heart);
 	},
 
 	drawBackground: (images) => { 
@@ -61,7 +61,7 @@ const graphics = {
 		context.fillText(text, x, y);
 	},
 
-	drawInGameInfo: (score=0, lives=3) => {
+	drawInGameInfo: (score=0, lives=3, heart) => {
 		const livesText = "Lives: ";
 		const scoreText = "Score: ";
 		const x = 30;
@@ -79,3 +79,5 @@ const graphics = {
 		heart.x = 90;
 	},
 }
+
+module.exports = graphics;

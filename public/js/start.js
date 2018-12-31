@@ -1,11 +1,43 @@
-const start = () => {
-	backgroundImages = [
+const graphics = require('./graphics.js');
+const endGame = require('./endscreen.js');
+const Sprite = require('./classes/Sprite.js');
+const Wizard = require('./classes/Wizard.js');
+
+function randomValue(max, min) {
+	return Math.floor(Math.random()*(max-min+1)) + min;
+};
+
+function didMakeContact(object, item) {
+	let rect1 = {
+		right: object.x + object.scaledWidth,
+		left: object.x,
+		top: object.y,
+		bottom: object.y + object.scaledHeight
+	};
+	let rect2 = {
+		right: item.x + item.scaledWidth,
+		left: itemLeft = item.x,
+		top: item.y,
+		bottom: item.y + item.scaledHeight
+	};
+		
+	let contact = !(rect1.right < rect2.left || 
+                rect1.left > rect2.right || 
+                rect1.bottom < rect2.top || 
+                rect1.top > rect2.bottom);
+
+	return contact;
+};
+
+module.exports = function() {
+	let backgroundImages = [
 		new Sprite('../assets/backTrees.png',0),
 		new Sprite('../assets/forestLights.png',1),
 		new Sprite('../assets/middleTrees.png',2),
 		new Sprite('../assets/frontTrees.png',3)
 	];
-	wizard = new Wizard('../assets/sotaroSprite.png');
+	let heart = new Sprite('../assets/heart.png', 0, 90, 27, 541, 600, 47, 87, 18, 20.4);
+	let wizard = new Wizard('../assets/sotaroSprite.png');
 
 	let score = 0;
 	let lives = 3;
@@ -137,7 +169,7 @@ const start = () => {
 
 		graphics.drawBackground(backgroundImages);
 		wizard.drawFrame();
-		graphics.drawInGameInfo(score, lives);
+		graphics.drawInGameInfo(score, lives, heart);
 		drawEnemies();
 
 		if (gameOver && wizard.y >= 230 && frameCount > 10) {
@@ -172,7 +204,7 @@ const start = () => {
 		if (showEndScreen) {
 			graphics.drawBackground(backgroundImages);
 			wizard.drawFrame();
-			graphics.drawInGameInfo(score, lives);
+			graphics.drawInGameInfo(score, lives, heart);
 			drawEnemies();
 			endGame(score);
 		}

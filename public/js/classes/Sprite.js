@@ -1,4 +1,4 @@
-class Sprite {
+module.exports = class Sprite {
 	constructor(img="",speed=0, x=0, y=0, height=650, width=650, 
 				xSpriteCoord=0, ySpriteCoord=0, scaledHeight=0, scaledWidth=0,
 				yVelocity=0) {
