@@ -88,18 +88,23 @@ module.exports = function() {
 	function fireballAnimation(fireballArray) {
 		fireballArray = fireballArray.filter((fireball) => {
 			fireball.updateScaledValues();
-			fireball.drawFrame();
+			if (fireball.speed !== null) {
+				fireball.drawFrame();
+			};
 			fireball.x += fireball.speed;
 			if (fireball.x >= canvas.width + 26) {
 				fireball.speed = null;
 			}
 			else {
 				enemies = enemies.filter((enemy) => {
-					if (didMakeContact(fireball, enemy)) {
-						enemy.speed = null;
-						if (enemy.x < canvas.width) {
-						 	score++;
-						} 
+					if (fireball.speed !== null) {
+						if (didMakeContact(fireball, enemy)) {
+							enemy.speed = null;
+							fireball.speed = null;
+							if (enemy.x < canvas.width) {
+							 	score++;
+							} 
+						}
 					}
 					return enemy.speed !== null;
 				}); 
